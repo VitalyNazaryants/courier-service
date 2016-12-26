@@ -1,17 +1,27 @@
-name := "courier-service"
+name := """courier-service"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
-
 scalaVersion := "2.11.8"
 
-libraryDependencies ++= Seq(
-  "com.google.inject" % "guice" % "4.1.0",
-  "com.typesafe.play" %% "play-slick" % "2.0.2",
-  "com.typesafe.play" %% "play-slick-evolutions" % "2.0.2",
-  "com.h2database" % "h2" % "1.4.191",
-  "io.swagger" %% "swagger-play2" % "1.5.1",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
-)
+initialize := {
+  val _ = initialize.value
+  if (sys.props("java.specification.version") != "1.8")
+    sys.error("Java 8 is required for this project.")
+}
 
+lazy val flyway = (project in file("modules/flyway"))
+  .enablePlugins(FlywayPlugin)
+
+lazy val api = (project in file("modules/api"))
+  .enablePlugins(Common)
+
+lazy val slick = (project in file("modules/slick"))
+  .enablePlugins(Common)
+  .aggregate(api)
+  .dependsOn(api)
+
+lazy val play = (project in file("modules/play"))
+  .enablePlugins(PlayScala)
+  .aggregate(api, slick)
+  .dependsOn(api, slick)

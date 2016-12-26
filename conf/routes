@@ -1,9 +1,0 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
-GET     /swagger.json               controllers.ApiHelpController.getResources
-
-# Home page
-GET     /persons                    controllers.PersonController.getPersons
-POST    /persons                    controllers.PersonController.addPerson
