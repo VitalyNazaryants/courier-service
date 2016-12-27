@@ -25,7 +25,7 @@ object Common extends AutoPlugin {
        Resolver.sonatypeRepo("snapshots")),
     libraryDependencies ++= Seq(
       "javax.inject" % "javax.inject" % "1",
-      "joda-time" % "joda-time" % "2.9.6",
+      "joda-time" % "joda-time" % "2.9.7",
       "org.joda" % "joda-convert" % "1.8.1",
       "com.google.inject" % "guice" % "4.1.0"
     ),
