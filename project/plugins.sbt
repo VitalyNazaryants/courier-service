@@ -14,4 +14,4 @@ addSbtPlugin("com.github.tototoshi" % "sbt-slick-codegen" % "1.2.1")
 libraryDependencies += "org.postgresql" % "postgresql" % "9.4.1212"
 
 // The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.10")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.12")
