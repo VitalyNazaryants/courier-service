@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0"
 )
 
-lazy val databaseUrl = sys.env.getOrElse("DB_DEFAULT_URL", "jdbc:postgresql:myapp")
+lazy val databaseUrl = sys.env.getOrElse("DB_DEFAULT_URL", "jdbc:postgresql://localhost:5432/myapp")
 lazy val databaseUser = sys.env.getOrElse("DB_DEFAULT_USER", "myuser")
 lazy val databasePassword = sys.env.getOrElse("DB_DEFAULT_PASSWORD", "mypass")
 

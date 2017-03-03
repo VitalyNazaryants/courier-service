@@ -1,10 +1,8 @@
 resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-
 resolvers += "Flyway" at "https://flywaydb.org/repo"
 
-// Database migration
+// Database db.migration
 addSbtPlugin("org.flywaydb" % "flyway-sbt" % "4.0.3")
 
 // Slick code generation
