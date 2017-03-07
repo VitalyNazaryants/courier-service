@@ -18,5 +18,11 @@ class UserRouter @Inject()(controller: UserController) extends SimpleRouter {
 
     case GET(p"/$id") =>
       controller.show(id)
+
+    case PUT(p"/$id") =>
+      controller.update(id)
+
+    case DELETE(p"/$id") =>
+      controller.delete(id)
   }
 }

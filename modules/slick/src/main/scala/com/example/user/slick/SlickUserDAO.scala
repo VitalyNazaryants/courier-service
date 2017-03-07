@@ -29,12 +29,12 @@ class SlickUserDAO @Inject()(db: Database) extends UserDAO with Tables {
 
   def lookup(id: UUID)(implicit ec: UserDAOExecutionContext): Future[Option[User]] = {
     val f: Future[Option[UsersRow]] = db.run(queryById(id).result.headOption)
-    f.map(maybeRow => maybeRow.map(usersRowToUser(_)))
+    f.map(maybeRow => maybeRow.map(usersRowToUser))
   }
 
   def all(implicit ec: UserDAOExecutionContext): Future[Seq[User]] = {
     val f = db.run(Users.result)
-    f.map(seq => seq.map(usersRowToUser(_)))
+    f.map(seq => seq.map(usersRowToUser))
   }
 
   def update(user: User)(implicit ec: UserDAOExecutionContext): Future[Int] = {

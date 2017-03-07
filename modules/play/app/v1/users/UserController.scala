@@ -16,7 +16,7 @@ case class UserInput(userType: String, name: String, phone: String, address: Opt
 class UserController @Inject()(action: UserAction, handler: UserDAO, userDAOExecutionContext: UserDAOExecutionContext)
   extends Controller {
 
-  implicit val ec = userDAOExecutionContext
+  implicit val ec: UserDAOExecutionContext = userDAOExecutionContext
 
   implicit val implicitWrites = new Writes[User] {
     override def writes(user: User): JsValue = {
@@ -65,8 +65,28 @@ class UserController @Inject()(action: UserAction, handler: UserDAO, userDAOExec
 
   def show(id: String): Action[AnyContent] = {
     action.async { implicit request =>
-      handler.lookup(UUID.fromString(id)).map { user =>
-        Ok(Json.toJson(user))
+      try {
+        handler.lookup(UUID.fromString(id)).map { user =>
+          Ok(Json.toJson(user))
+        }
+      } catch {
+        case _: IllegalArgumentException => Future.successful(BadRequest)
+      }
+    }
+  }
+
+  def update(id: String): Action[AnyContent] = {
+    action.async { implicit request =>
+      processJsonPut(id)
+    }
+  }
+
+  def delete(id: String): Action[AnyContent] = {
+    action.async { implicit request =>
+      try {
+        handler.delete(UUID.fromString(id)).map(_ => Ok)
+      } catch {
+        case _: IllegalArgumentException => Future.successful(BadRequest)
       }
     }
   }
@@ -80,8 +100,33 @@ class UserController @Inject()(action: UserAction, handler: UserDAO, userDAOExec
     def success(input: UserInput) = {
       val user = User(id = UUID.randomUUID(), userType = input.userType, name = input.name, phone = input.phone,
         address = input.address, passport = input.passport, email = input.email, createdAt = DateTime.now(), updatedAt = None)
-      handler.create(user).map { user =>
+      handler.create(user).map { _ =>
         Created(Json.toJson(user))
+      }
+    }
+
+    form.bindFromRequest().fold(failure, success)
+  }
+
+  private def processJsonPut[A](id: String)(
+    implicit request: UserRequest[A]): Future[Result] = {
+    def failure(badForm: Form[UserInput]) = {
+      Future.successful(BadRequest(badForm.errorsAsJson))
+    }
+
+    def success(input: UserInput) = {
+      try {
+        val uuid = UUID.fromString(id)
+        handler.lookup(uuid).flatMap {
+          case Some(user) =>
+            val updatedUser = User(uuid, input.userType, input.name, input.phone, input.address, input.passport,
+              input.email, user.createdAt, Some(DateTime.now()))
+            handler.update(updatedUser).map(_ => Ok(Json.toJson(updatedUser)))
+          case None =>
+            processJsonPost()
+        }
+      } catch {
+        case _: IllegalArgumentException => Future.successful(BadRequest)
       }
     }
 
