@@ -4,8 +4,8 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
 import org.joda.time.DateTime
-import slick.driver.JdbcProfile
 import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
 import com.example.user._
 
 import scala.concurrent.Future

@@ -2,14 +2,14 @@ import slick.codegen.SourceCodeGenerator
 import slick.{model => m}
 
 libraryDependencies ++= Seq(
-  "com.zaxxer" % "HikariCP" % "2.5.1",
-  "com.typesafe.slick" %% "slick" % "3.1.1",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.1.1",
-  "org.postgresql" % "postgresql" % "9.4.1212",
-  "com.github.tminglei" %% "slick-pg" % "0.14.4",
-  "com.github.tminglei" %% "slick-pg_play-json" % "0.14.4",
-  "com.github.tminglei" %% "slick-pg_joda-time" % "0.14.4",
-  "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0"
+  "com.zaxxer" % "HikariCP" % "2.6.1",
+  "com.typesafe.slick" %% "slick" % "3.2.0",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.0",
+  "org.postgresql" % "postgresql" % "42.0.0",
+  "com.github.tminglei" %% "slick-pg" % "0.15.0-RC",
+  "com.github.tminglei" %% "slick-pg_play-json" % "0.15.0-RC",
+  "com.github.tminglei" %% "slick-pg_joda-time" % "0.15.0-RC",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.3.0"
 )
 
 lazy val databaseUrl = sys.env.getOrElse("DB_DEFAULT_URL", "jdbc:postgresql://localhost:5432/myapp")
