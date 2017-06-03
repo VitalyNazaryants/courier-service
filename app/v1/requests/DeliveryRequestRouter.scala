@@ -1,4 +1,4 @@
-package v1.users
+package v1.requests
 
 import javax.inject.Inject
 
@@ -6,8 +6,8 @@ import play.api.routing.Router.Routes
 import play.api.routing.SimpleRouter
 import play.api.routing.sird._
 
-class UserRouter @Inject()(controller: UserController) extends SimpleRouter {
-  val prefix = "/v1/users"
+class DeliveryRequestRouter @Inject()(controller: DeliveryRequestController) extends SimpleRouter {
+  val prefix = "/app/v1/requests"
 
   override def routes: Routes = {
     case GET(p"/") =>

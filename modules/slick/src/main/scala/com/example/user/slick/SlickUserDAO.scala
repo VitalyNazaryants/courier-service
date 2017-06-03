@@ -8,16 +8,20 @@ import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 import com.example.user._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
 /**
- * A User DAO implemented with Slick, leveraging Slick code gen.
- *
- * Note that you must run "flyway/flywayMigrate" before "compile" here.
- */
+  * A User DAO implemented with Slick, leveraging Slick code gen.
+  *
+  * Note that you must run "flyway/flywayMigrate" before "compile" here.
+  *
+  * @param db the slick database that this user DAO is using internally, bound through Module.
+  * @param ec a CPU bound execution context.  Slick manages blocking JDBC calls with its
+  *           own internal thread pool, so Play's default execution context is fine here.
+  */
 @Singleton
-class SlickUserDAO @Inject()(db: Database) extends UserDAO with Tables {
+class SlickUserDAO @Inject()(db: Database)(implicit ec: ExecutionContext) extends UserDAO with Tables {
 
   // Use the custom postgresql driver.
   override val profile: JdbcProfile = MyPostgresDriver
@@ -27,25 +31,25 @@ class SlickUserDAO @Inject()(db: Database) extends UserDAO with Tables {
   private val queryById = Compiled(
     (id: Rep[UUID]) => Users.filter(_.id === id))
 
-  def lookup(id: UUID)(implicit ec: UserDAOExecutionContext): Future[Option[User]] = {
+  def lookup(id: UUID): Future[Option[User]] = {
     val f: Future[Option[UsersRow]] = db.run(queryById(id).result.headOption)
     f.map(maybeRow => maybeRow.map(usersRowToUser))
   }
 
-  def all(implicit ec: UserDAOExecutionContext): Future[Seq[User]] = {
+  def all: Future[Seq[User]] = {
     val f = db.run(Users.result)
     f.map(seq => seq.map(usersRowToUser))
   }
 
-  def update(user: User)(implicit ec: UserDAOExecutionContext): Future[Int] = {
+  def update(user: User): Future[Int] = {
     db.run(queryById(user.id).update(userToUsersRow(user)))
   }
 
-  def delete(id: UUID)(implicit ec: UserDAOExecutionContext): Future[Int] = {
+  def delete(id: UUID): Future[Int] = {
     db.run(queryById(id).delete)
   }
 
-  def create(user: User)(implicit ec: UserDAOExecutionContext): Future[Int] = {
+  def create(user: User): Future[Int] = {
     db.run(
       Users += userToUsersRow(user.copy(createdAt = DateTime.now()))
     )

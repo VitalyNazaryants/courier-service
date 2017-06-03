@@ -3,20 +3,18 @@ package v1.users
 import java.util.UUID
 import javax.inject.Inject
 
-import com.example.user.{User, UserDAO, UserDAOExecutionContext}
+import com.example.user.{User, UserDAO}
 import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.mvc.{Controller, _}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class UserInput(userType: String, name: String, phone: String, address: Option[String], passport: Option[String], email: String)
 
-class UserController @Inject()(action: UserAction, handler: UserDAO, userDAOExecutionContext: UserDAOExecutionContext)
+class UserController @Inject()(action: UserAction, handler: UserDAO)(implicit ec: ExecutionContext)
   extends Controller {
-
-  implicit val ec: UserDAOExecutionContext = userDAOExecutionContext
 
   implicit val implicitWrites = new Writes[User] {
     override def writes(user: User): JsValue = {
