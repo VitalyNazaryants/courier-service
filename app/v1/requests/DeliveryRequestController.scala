@@ -3,7 +3,7 @@ package v1.requests
 import java.util.UUID
 import javax.inject.Inject
 
-import com.example.request.{DeliveryRequest, DeliveryRequestDAO}
+import com.example.delivery.request.{DeliveryRequest, DeliveryRequestDAO}
 import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.libs.json.{JsValue, Json, Writes}

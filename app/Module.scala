@@ -1,7 +1,8 @@
 import javax.inject.{Inject, Provider, Singleton}
 
+import com.example.delivery.request.DeliveryRequestDAO
 import com.example.user.UserDAO
-import com.example.user.slick.SlickUserDAO
+import com.example.user.slick.{SlickDeliveryRequestDAO, SlickUserDAO}
 import com.google.inject.AbstractModule
 import com.typesafe.config.Config
 import play.api.inject.ApplicationLifecycle
@@ -21,7 +22,9 @@ class Module(environment: Environment,
     bind(classOf[Config]).toInstance(configuration.underlying)
     bind(classOf[Database]).toProvider(classOf[DatabaseProvider])
     bind(classOf[UserDAO]).to(classOf[SlickUserDAO])
+    bind(classOf[DeliveryRequestDAO]).to(classOf[SlickDeliveryRequestDAO])
     bind(classOf[UserDAOCloseHook]).asEagerSingleton()
+    bind(classOf[DeliveryRequestDAOCloseHook]).asEagerSingleton()
   }
 }
 
@@ -32,6 +35,12 @@ class DatabaseProvider @Inject() (config: Config) extends Provider[Database] {
 
 /** Closes database connections safely.  Important on dev restart. */
 class UserDAOCloseHook @Inject()(dao: UserDAO, lifecycle: ApplicationLifecycle) {
+  lifecycle.addStopHook { () =>
+    Future.successful(dao.close())
+  }
+}
+
+class DeliveryRequestDAOCloseHook @Inject()(dao: DeliveryRequestDAO, lifecycle: ApplicationLifecycle) {
   lifecycle.addStopHook { () =>
     Future.successful(dao.close())
   }

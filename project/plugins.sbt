@@ -9,7 +9,7 @@ addSbtPlugin("org.flywaydb" % "flyway-sbt" % "4.1.2")
 // https://github.com/tototoshi/sbt-slick-codegen
 addSbtPlugin("com.github.tototoshi" % "sbt-slick-codegen" % "1.2.1")
 
-libraryDependencies += "org.postgresql" % "postgresql" % "9.4.1212"
+libraryDependencies += "org.postgresql" % "postgresql" % "9.4-1201-jdbc41"
 
 // The Play plugin
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.15")

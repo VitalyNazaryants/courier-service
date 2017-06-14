@@ -6,7 +6,7 @@ import play.api.libs.json.{JsValue, Json}
 /**
  * A postgresql driver with extended Joda and JSON support.
  */
-trait MyPostgresDriver extends ExPostgresProfile
+trait MyPostgresDriver extends ExPostgresDriver
 with PgArraySupport
 with PgDateSupportJoda
 with PgPlayJsonSupport {

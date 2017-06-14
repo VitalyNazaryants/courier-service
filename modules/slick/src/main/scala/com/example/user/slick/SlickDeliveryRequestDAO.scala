@@ -3,7 +3,7 @@ package com.example.user.slick
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
-import com.example.request.{DeliveryRequest, DeliveryRequestDAO}
+import com.example.delivery.request.{DeliveryRequest, DeliveryRequestDAO}
 import org.joda.time.DateTime
 import slick.driver.JdbcProfile
 import slick.jdbc.JdbcBackend.Database
